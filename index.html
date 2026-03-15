@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alma de Café — Cafetería Artesanal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --cream:      #F5EFE0;
+      --warm-white: #FAF6EE;
+      --espresso:   #1C0F07;
+      --caramel:    #C07A3A;
+      --gold:       #D4A853;
+      --mocha:      #6B3F2A;
+      --latte:      #C9A882;
+      --fog:        #E8DFD0;
+      --carbon:     #191919;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      background: var(--cream);
+      color: var(--espresso);
+      overflow-x: hidden;
+    }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.5rem 4rem;
+  transition: background 0.4s, padding 0.4s;
+}
+nav.scrolled {
+  background: rgba(28, 15, 7, 0.92);
+  backdrop-filter: blur(12px);
+  padding: 1rem 4rem;
+  border-bottom: 1px solid rgba(192,122,58,0.2);
+}
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--cream);
+  text-decoration: none;
+}
+.nav-logo span { color: var(--gold); font-style: italic; }
+
+.nav-links { display: flex; gap: 2.5rem; list-style: none; }
+.nav-links a {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgb(255, 255, 255);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--gold); }
+
+    /* HERO */
+    .hero {
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: var(--espresso);
+}
+
+    /* Fondo con gradiente de textura */
+    .hero-bg {
+  position: fixed; inset: 0;
+  background-image: url('imgs/fondo-hero.jfif');
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
+}
+    /* Grain overlay para textura artesanal */
+    .hero-grain {
+      position: absolute; inset: 0;
+      z-index: 1;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-size: 200px;
+    }
+
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      padding: 0 2rem;
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4.5vw, 4rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: var(--cream);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.4s ease forwards;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-sub {
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      font-weight: 300;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.85);
+      max-width: 520px;
+      margin: 0 auto 3rem;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.6s ease forwards;
+    }
+
+
+    /* Animaciones */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.4; transform: scaleY(1); }
+      50%       { opacity: 1;   transform: scaleY(1.15); }
+    }
+    .hero-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,1);
+  z-index: 0;
+  opacity: 0.1;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+/* MENU */
+.section-menu {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  padding: 6rem 4rem;
+}
+
+.menu-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--caramel);
+  text-align: center;
+  margin-bottom: 0.8rem;
+}
+
+.menu-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: var(--cream);
+  text-align: center;
+  margin-bottom: 5rem;
+}
+
+.menu-category {
+  margin-bottom: 4rem;
+}
+
+.menu-category-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-style: italic;
+  color: var(--cream);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(201,168,130,0.15);
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.menu-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(201,168,130,0.1);
+  padding: 2rem;
+  transition: transform 0.3s, background 0.3s, border-color 0.3s;
+  position: relative;
+  overflow: hidden;
+  min-height: 280px;
+}
+.menu-card:hover {
+  transform: translateY(-6px);
+  background: rgba(192,122,58,0.08);
+  border-color: rgba(201,168,130,0.35);
+}
+
+.menu-card-emoji {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+  display: block;
+  transition: transform 0.3s;
+}
+.menu-card:hover .menu-card-emoji { transform: scale(1.15); }
+
+.menu-card-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--cream);
+  margin-bottom: 0.4rem;
+}
+
+.menu-card-desc {
+  font-size: 0.95rem;
+  color: rgb(206, 206, 206);
+  line-height: 1.6;
+  font-weight: 300;
+  margin-bottom: 1.5rem;
+}
+
+.menu-card-price {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: rgb(255, 255, 255)
+}
+.menu-card-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+.menu-card-info {
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%);
+  padding: 1.5rem;
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+}
+/* NOSOTROS */
+.section-nosotros {
+  position: relative;
+  z-index: 1;
+  background: rgb(205, 205, 205);
+  padding: 8rem 4rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: center;
+}
+
+.nosotros-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--carbon);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.nosotros-label::before {
+  content: '';
+  width: 30px; height: 1px;
+  background: var(--carbon);
+}
+
+.nosotros-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 900;
+  color: var(--cream);
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+}
+.nosotros-title em {
+  font-style: italic;
+  color: var(--carbon);
+}
+
+.nosotros-text {
+  font-size: 1.1rem;
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--carbon);
+  margin-bottom: 3rem;
+}
+
+.nosotros-stats {
+  display: flex;
+  gap: 2.5rem;
+  border-top: 1px solid var(--carbon);
+  padding-top: 2rem;
+}
+
+.stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--carbon);
+  line-height: 1;
+}
+
+.stat-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--carbon);
+  margin-top: 0.3rem;
+}
+
+.nosotros-img-wrap {
+  position: relative;
+  height: 520px;
+}
+
+.nosotros-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+.nosotros-img.active {
+  opacity: 1;
+}
+
+.nosotros-img-badge {
+  position: absolute;
+  bottom: -1.5rem;
+  left: -1.5rem;
+  background: var(--carbon);
+  padding: 1.5rem 2rem;
+}
+
+.badge-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--cream);
+  line-height: 1;
+}
+
+.badge-text {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(245,239,224,0.8);
+  margin-top: 0.2rem;
+}
+/* CONTACTO */
+.section-contacto {
+  position: relative;
+  z-index: 1;
+  background: var(--carbon);
+  padding: 8rem 4rem;
+}
+
+.contacto-header {
+  text-align: center;
+  margin-bottom: 5rem;
+}
+
+.contacto-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--cream);
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.contacto-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 900;
+  color: var(--cream);
+}
+.contacto-title em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.contacto-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.contacto-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.contacto-bloque-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--cream);
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(201,168,130,0.15);
+}
+
+.horarios-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.horario-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--cream);
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(201,168,130,0.07);
+}
+.horario-item span:last-child {
+  color: var(--cream);
+  font-weight: 400;
+}
+
+.contacto-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.contacto-link {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--cream);
+  text-decoration: none;
+  padding: 0.9rem 1.2rem;
+  border: 1px solid rgba(201,168,130,0.12);
+  transition: all 0.25s ease;
+}
+.contacto-link:hover {
+  border-color: var(--caramel);
+  background: rgba(192,122,58,0.07);
+  color: var(--cream);
+  transform: translateX(6px);
+}
+
+.contacto-link-icon {
+  width: 38px; height: 38px;
+  border: 1px solid rgba(201,168,130,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+  transition: background 0.25s;
+}
+.contacto-link:hover .contacto-link-icon {
+  background: var(--caramel);
+  border-color: var(--caramel);
+}
+
+.contacto-mapa {
+  width: 100%;
+  height: 100%;
+  min-height: 500px;
+  border: 1px solid rgba(201,168,130,0.15);
+  filter: grayscale(40%) contrast(1.05);
+  display: block;
+}
+.contacto-link-icon img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+/* MÓVIL */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 4px;
+}
+.hamburger span {
+  width: 24px; height: 1.5px;
+  background: var(--cream);
+  transition: all 0.3s ease;
+  display: block;
+}
+.hamburger.active span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+.nav-mobile {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(28,15,7,0.97);
+  backdrop-filter: blur(16px);
+  z-index: 99;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+}
+.nav-mobile.active { display: flex; }
+.nav-mobile a {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--cream);
+  text-decoration: none;
+  font-style: italic;
+  transition: color 0.2s;
+}
+.nav-mobile a:hover { color: var(--gold); }
+
+@media (max-width: 768px) {
+  .hamburger { display: flex; }
+  .nav-links { display: none; }
+
+  nav { padding: 1.2rem 1.8rem; }
+  nav.scrolled { padding: 0.8rem 1.8rem; }
+
+  .hero-title { font-size: clamp(2rem, 10vw, 3rem); }
+  .hero-sub { font-size: 1rem; padding: 0 1rem; }
+
+  .section-menu { padding: 5rem 1.5rem; }
+  .menu-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .menu-title { font-size: 2rem; }
+
+  .section-nosotros {
+    grid-template-columns: 1fr;
+    padding: 5rem 1.5rem;
+    gap: 3rem;
+  }
+  .nosotros-img-wrap { height: 320px; }
+  .nosotros-img-badge { bottom: -1rem; left: -0.5rem; }
+
+  .section-contacto { padding: 5rem 1.5rem; }
+  .contacto-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .contacto-mapa { min-height: 320px; }
+}
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="#" class="nav-logo">Alma de <span>Café</span></a>
+    <div class="hamburger" id="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#menu">Menú</a></li>
+      <li><a href="#nosotros">Nosotros</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+    <div class="nav-mobile" id="navMobile">
+      <a href="#menu" class="mobile-link">Menú</a>
+      <a href="#nosotros" class="mobile-link">Nosotros</a>
+      <a href="#contacto" class="mobile-link">Contacto</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="inicio" style="z-index: 0; position: relative;">
+    <div class="hero-bg"></div>
+<div class="hero-overlay"></div>
+    <div class="hero-grain"></div>
+
+    <div class="hero-content">
+      <h1 class="hero-title">
+        Donde cada taza<br>cuenta una <em>historia</em>
+      </h1>
+      <p class="hero-sub">
+        Granos de origen, preparación con cuidado y un espacio diseñado para que el tiempo se detenga.
+      </p>
+    </div>
+
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="scroll-bar"></div>
+    </div>
+  </section>
+
+  <!-- MENÚ -->
+<section class="section-menu" id="menu">
+    <p class="menu-label">Lo que ofrecemos</p>
+    <h2 class="menu-title">Nuestro Menú</h2>
+  
+    <div class="menu-category">
+      <h3 class="menu-category-title">— Cafés</h3>
+      <div class="menu-grid">
+        <div class="menu-card">
+            <img class="menu-card-img" src="imgs/Espresso.jfif" alt="Espresso">
+            <div class="menu-card-info">
+          <p class="menu-card-name">Espresso</p>
+          <p class="menu-card-desc">Puro, intenso y con cuerpo. El clásico que nunca falla.</p>
+          <p class="menu-card-price">$45</p>
+         </div>
+        </div>
+        <div class="menu-card">
+            <img class="menu-card-img" src="imgs/Latte.jfif" alt="Latte">
+            <div class="menu-card-info">
+          <p class="menu-card-name">Latte de Vainilla</p>
+          <p class="menu-card-desc">Espresso suave con leche vaporizada y toque de vainilla.</p>
+          <p class="menu-card-price">$65</p>
+         </div>
+        </div>
+        <div class="menu-card">
+            <img class="menu-card-img" src="imgs/Cold-Brew.jfif" alt="Cold-brew">
+            <div class="menu-card-info">
+          <p class="menu-card-name">Cold Brew</p>
+          <p class="menu-card-desc">Infusión en frío por 12 horas. Suave, oscuro y sin acidez.</p>
+          <p class="menu-card-price">$70</p>
+        </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="menu-category">
+      <h3 class="menu-category-title">— Postres</h3>
+      <div class="menu-grid">
+        <div class="menu-card">
+            <img class="menu-card-img" src="imgs/Cheesecake.jfif" alt="Cheesecake">
+            <div class="menu-card-info">
+          <p class="menu-card-name">Cheesecake de Frutos Rojos</p>
+          <p class="menu-card-desc">Base de galleta, relleno cremoso y cobertura de berries.</p>
+          <p class="menu-card-price">$85</p>
+         </div>
+        </div>
+        <div class="menu-card">
+          <img class="menu-card-img" src="imgs/Brownie.jfif" alt="Brownie">
+          <div class="menu-card-info">
+          <p class="menu-card-name">Brownie Caliente</p>
+          <p class="menu-card-desc">Chocolate intenso, centro suave, servido con helado de vainilla.</p>
+          <p class="menu-card-price">$75</p>
+         </div>
+        </div>
+        <div class="menu-card">
+          <img class="menu-card-img" src="imgs/Croissant.jfif" alt="Croissant">
+          <div class="menu-card-info">
+          <p class="menu-card-name">Croissant de Almendra</p>
+          <p class="menu-card-desc">Hojaldrado, relleno de crema de almendra y glaseado suave.</p>
+          <p class="menu-card-price">$55</p>
+        </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="menu-category">
+      <h3 class="menu-category-title">— Bebidas</h3>
+      <div class="menu-grid">
+        <div class="menu-card">
+          <img class="menu-card-img" src="imgs/Matcha Latte.jfif" alt="Matcha">
+          <div class="menu-card-info">
+          <p class="menu-card-name">Matcha Latte</p>
+          <p class="menu-card-desc">Matcha ceremonial japonés con leche de avena vaporizada.</p>
+          <p class="menu-card-price">$70</p>
+         </div>
+        </div>
+        <div class="menu-card">
+          <img class="menu-card-img" src="imgs/Smoothie.jfif" alt="Smoothie">
+          <div class="menu-card-info">
+          <p class="menu-card-name">Smoothie del Día</p>
+          <p class="menu-card-desc">Frutas frescas de temporada, sin azúcar añadida.</p>
+          <p class="menu-card-price">$60</p>
+         </div>
+        </div>
+        <div class="menu-card">
+          <img class="menu-card-img" src="imgs/Te-limon.jfif" alt="Te-limon">
+          <div class="menu-card-info">
+          <p class="menu-card-name">Limonada de Jengibre</p>
+          <p class="menu-card-desc">Limón natural, jengibre fresco y un toque de miel.</p>
+          <p class="menu-card-price">$55</p>
+         </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- NOSOTROS -->
+<section class="section-nosotros" id="nosotros">
+
+  <div class="nosotros-content">
+    <p class="nosotros-label">Quiénes somos</p>
+    <h2 class="nosotros-title">Más que un café,<br>una <em>experiencia</em></h2>
+    <p class="nosotros-text">
+      Nacimos de la pasión por el café de especialidad y el deseo de crear un espacio donde cada visita se convierta en un momento memorable. Seleccionamos granos de los mejores orígenes del mundo y los preparamos con técnica y dedicación.
+    </p>
+    <div class="nosotros-stats">
+      <div class="stat-item">
+        <p class="stat-num">6+</p>
+        <p class="stat-label">Años de experiencia</p>
+      </div>
+      <div class="stat-item">
+        <p class="stat-num">12</p>
+        <p class="stat-label">Orígenes de café</p>
+      </div>
+      <div class="stat-item">
+        <p class="stat-num">+500</p>
+        <p class="stat-label">Clientes al día</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="nosotros-img-wrap">
+    <img class="nosotros-img active" src="imgs/Nosotros.jfif" alt="foto 1">
+    <img class="nosotros-img" src="imgs/Nosotros2.jfif" alt="foto 2">
+    <img class="nosotros-img" src="imgs/Nosotros3.jfif" alt="foto 3">
+    <div class="nosotros-img-badge">
+      <p class="badge-num">2018</p>
+      <p class="badge-text">Desde siempre</p>
+    </div>
+  </div>
+
+</section>
+
+<!-- CONTACTO -->
+<section class="section-contacto" id="contacto">
+
+  <div class="contacto-header">
+    <span class="contacto-label">Encuéntranos</span>
+    <h2 class="contacto-title">Visítanos y vive la <em>experiencia</em></h2>
+  </div>
+
+  <div class="contacto-grid">
+
+    <div class="contacto-info">
+
+      <!-- Horarios -->
+      <div>
+        <p class="contacto-bloque-title">— Horarios</p>
+        <div class="horarios-list">
+          <div class="horario-item">
+            <span>Lunes — Viernes</span>
+            <span>7:00 am — 9:00 pm</span>
+          </div>
+          <div class="horario-item">
+            <span>Sábado</span>
+            <span>8:00 am — 10:00 pm</span>
+          </div>
+          <div class="horario-item">
+            <span>Domingo</span>
+            <span>9:00 am — 6:00 pm</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contacto -->
+      <div>
+        <p class="contacto-bloque-title">— Contacto</p>
+        <div class="contacto-links">
+          <a href="tel:+523311234567" class="contacto-link">
+            <div class="contacto-link-icon"><img src="icons-contact/Phone.png" alt="telefono"></div>
+            +52 33 1234 5678
+          </a>
+          <a href="https://wa.me/523311234567" target="_blank" class="contacto-link">
+            <div class="contacto-link-icon"><img src="icons-contact/Whatsapp.png" alt="whatsapp"></div>
+            WhatsApp
+          </a>
+          <a href="https://instagram.com" target="_blank" class="contacto-link">
+            <div class="contacto-link-icon"><img src="icons-contact/Instagram.png" alt="instagram"></div>
+            @almadecafe
+          </a>
+          <a href="https://facebook.com" target="_blank" class="contacto-link">
+            <div class="contacto-link-icon"><img src="icons-contact/Facebook.png" alt="facebook"></div>
+            Alma de Café
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Mapa -->
+    <iframe
+      class="contacto-mapa"
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3733.0!2d-103.3496!3d20.6597!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjDCsDM5JzM1LjAiTiAxMDPCsDIwJzU4LjciVw!5e0!3m2!1ses!2smx!4v1"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+
+  </div>
+
+  </section>
+  
+  <script>
+    const navbar = document.getElementById('navbar');
+
+// Scroll suave con duración controlada
+function smoothScrollTo(target, duration = 1200) {
+  const start = window.scrollY;
+  const end = target.getBoundingClientRect().top + start;
+  const startTime = performance.now();
+
+  function easeInOutCubic(t) {
+    return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+  }
+
+  function step(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    window.scrollTo(0, start + (end - start) * easeInOutCubic(progress));
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const href = link.getAttribute('href');
+    const target = document.querySelector(href);
+    if (target) smoothScrollTo(target, 1200);
+  });
+});
+
+// Logo — regresa al hero y reactiva animaciones
+document.querySelector('.nav-logo').addEventListener('click', e => {
+  e.preventDefault();
+  smoothScrollTo(document.getElementById('inicio'), 1200);
+  setTimeout(() => {
+    document.querySelector('.hero-title').style.animation = 'none';
+    document.querySelector('.hero-sub').style.animation = 'none';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        document.querySelector('.hero-title').style.animation = 'fadeUp 0.7s 0.2s ease forwards';
+        document.querySelector('.hero-sub').style.animation = 'fadeUp 0.7s 0.4s ease forwards';
+      });
+    });
+  }, 800);
+});
+
+const overlay = document.querySelector('.hero-overlay');
+
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 50);
+  const scroll = window.scrollY;
+  const vh = window.innerHeight;
+  const progress = Math.min(scroll / vh, 1);
+  const ease = progress * progress * (3 - 2 * progress);
+overlay.style.opacity = 0.1 + ease * 0.85;
+});
+
+const slides = document.querySelectorAll('.nosotros-img');
+let current = 0;
+setInterval(() => {
+  slides[current].classList.remove('active');
+  current = (current + 1) % slides.length;
+  slides[current].classList.add('active');
+}, 3000);
+
+const hamburger = document.getElementById('hamburger');
+const navMobile = document.getElementById('navMobile');
+
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('active');
+  navMobile.classList.toggle('active');
+});
+
+document.querySelectorAll('.mobile-link').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    hamburger.classList.remove('active');
+    navMobile.classList.remove('active');
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) smoothScrollTo(target, 1200);
+  });
+});
+  </script>
+
+</body>
+</html>
